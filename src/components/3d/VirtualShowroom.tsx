@@ -670,20 +670,12 @@ export const VirtualShowroom: React.FC<VirtualShowroomProps> = ({
         const itemKey = (topObj.userData.itemKey || topObj.userData.productId || topObj.userData.product?.id) as string;
         const item = productMeshesRef.current.get(itemKey);
         if (item) {
-          // INITIATE GARMENT TOUCH & DRAG
-          draggedItemRef.current = item;
-          item.isGrabbed = true;
-          dragStartMouse.current = { x: e.clientX, y: e.clientY };
-          lastMousePos.current = { x: e.clientX, y: e.clientY };
-          dragStartTime.current = performance.now();
-          smoothDragVelocity.current = { x: 0, y: 0 };
-
-          setActiveDragProduct(item.product.id);
-          soundManager.playClick(1400);
-
-          container.style.cursor = 'grabbing';
-          isDraggingCamera.current = false;
-          return;
+          // Immediately trigger onSelectProduct without waiting for drag-release calculations
+          if (!item.isEmpty) {
+            soundManager.playClick(600);
+            onSelectProduct(item.product);
+            return;
+          }
         }
       }
     }

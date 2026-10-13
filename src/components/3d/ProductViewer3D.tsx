@@ -4,7 +4,6 @@ import { Product } from '../../types/store';
 import {
   createCrownOfThornsApparelMesh,
   updateGarmentClothPhysics,
-  matteBlackIndustrialSteelRailMat,
   applyGarmentOffsets,
   GarmentTransformOffsets
 } from './geometries';
@@ -215,29 +214,7 @@ export const ProductViewer3D: React.FC<ProductViewer3DProps> = ({
 
     const colorway = product.colorways[selectedColorIndex] || product.colorways[0];
     const newMesh = createCrownOfThornsApparelMesh(product, colorway, true, false, offsets);
-    newMesh.position.set(0, -0.15, 0);
-    // Strictly maintain 45-degree three-quarter perspective by default
     newMesh.rotation.set(0, productAngles[activeAngleIndex]?.rotY ?? 0, 0);
-
-    // Sleek horizontal matte-black industrial steel floating garment rail segment
-    // positioned so the silver hook rests securely over it with exact structural mechanics
-    const railSegmentGeo = new THREE.CylinderGeometry(0.022, 0.022, 1.8, 32);
-    railSegmentGeo.rotateZ(Math.PI / 2);
-    const railSegmentMesh = new THREE.Mesh(railSegmentGeo, matteBlackIndustrialSteelRailMat);
-    // In local coordinates of newMesh, rail center is at y = 0.580
-    railSegmentMesh.position.set(0, 0.580, 0);
-    railSegmentMesh.castShadow = true;
-    railSegmentMesh.receiveShadow = true;
-    newMesh.add(railSegmentMesh);
-
-    // Wall mounting arm for floating industrial aesthetic
-    const railMountGeo = new THREE.CylinderGeometry(0.018, 0.018, 0.45, 16);
-    railMountGeo.rotateX(Math.PI / 2);
-    const railMountMesh = new THREE.Mesh(railMountGeo, matteBlackIndustrialSteelRailMat);
-    railMountMesh.position.set(0, 0.580, -0.22);
-    railMountMesh.castShadow = true;
-    newMesh.add(railMountMesh);
-
     modelGroupRef.current = newMesh;
     scene.add(newMesh);
   }, [product, selectedColorIndex]);
@@ -291,25 +268,6 @@ export const ProductViewer3D: React.FC<ProductViewer3DProps> = ({
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.1);
     scene.add(ambientLight);
-
-    // Matte Black Architectural Studio Plinth with Streetwear Yellow Accent
-    const plinthGeo = new THREE.CylinderGeometry(1.2, 1.25, 0.08, 36);
-    const plinthMat = new THREE.MeshStandardMaterial({
-      color: 0x141416,
-      roughness: 0.42,
-      metalness: 0.75
-    });
-    const plinth = new THREE.Mesh(plinthGeo, plinthMat);
-    plinth.position.set(0, -0.72, 0);
-    scene.add(plinth);
-
-    // Warm Yellow Accent Ring
-    const ringGeo = new THREE.RingGeometry(1.18, 1.2, 48);
-    ringGeo.rotateX(-Math.PI / 2);
-    const ringMat = new THREE.MeshBasicMaterial({ color: 0xfacc15, transparent: true, opacity: 0.75 });
-    const ring = new THREE.Mesh(ringGeo, ringMat);
-    ring.position.set(0, -0.67, 0);
-    scene.add(ring);
 
     // Fast & smooth 3D render loop with live cloth physics
     let animId: number;

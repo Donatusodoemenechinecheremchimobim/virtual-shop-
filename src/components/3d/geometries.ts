@@ -100,6 +100,9 @@ const whiteShelfMat = new THREE.MeshStandardMaterial({
 
 const textureLoader = new THREE.TextureLoader();
 
+// Global memory cache for loaded 3D GLB models to enable instantaneous 0ms clones on preview/click
+const glbCache = new Map<string, THREE.Group>();
+
 export function createCrownOfThornsApparelMesh(
   product: Product,
   _colorway: Colorway,
@@ -112,6 +115,7 @@ export function createCrownOfThornsApparelMesh(
   const hangerGroup = new THREE.Group();
   hangerGroup.name = 'hanger';
 
+  // 1. Silver metal hook & ferrule
   const hookShape = new THREE.CurvePath<THREE.Vector3>();
   const hookCurve1 = new THREE.LineCurve3(
     new THREE.Vector3(0, 0.485, 0),
@@ -141,40 +145,72 @@ export function createCrownOfThornsApparelMesh(
   ferruleMesh.position.set(0, 0.485, 0);
   hangerGroup.add(ferruleMesh);
 
+  // 2. Wooden shoulder bar and strut:
+  // When isEmptyHanger is true: Full wide wooden hanger with shoulder bar and crossbar strut
+  // When !isEmptyHanger (garment on hanger): Only a narrow neck bridge (0.26m) visible directly above collar,
+  // preventing any hanger clipping through sleeves or chest on sleeved shirts like Stoner Gal
   const hangerBarLength = 0.72;
-  const hangerCurve = new THREE.QuadraticBezierCurve3(
-    new THREE.Vector3(-hangerBarLength * 0.5, 0.405, 0),
-    new THREE.Vector3(0, 0.470, 0),
-    new THREE.Vector3(hangerBarLength * 0.5, 0.405, 0)
-  );
-  const hangerBarGeo = new THREE.TubeGeometry(hangerCurve, 36, 0.021, 16, false);
-  hangerBarGeo.scale(1, 0.78, 1.35); 
-  const hangerBarMesh = new THREE.Mesh(hangerBarGeo, matteBlackWoodHangerMat);
-  hangerBarMesh.castShadow = true;
-  hangerGroup.add(hangerBarMesh);
+  if (isEmptyHanger) {
+    const hangerCurve = new THREE.QuadraticBezierCurve3(
+      new THREE.Vector3(-hangerBarLength * 0.5, 0.405, 0),
+      new THREE.Vector3(0, 0.470, 0),
+      new THREE.Vector3(hangerBarLength * 0.5, 0.405, 0)
+    );
+    const hangerBarGeo = new THREE.TubeGeometry(hangerCurve, 36, 0.021, 16, false);
+    hangerBarGeo.scale(1, 0.78, 1.35); 
+    const hangerBarMesh = new THREE.Mesh(hangerBarGeo, matteBlackWoodHangerMat);
+    hangerBarMesh.castShadow = true;
+    hangerGroup.add(hangerBarMesh);
 
-  [-hangerBarLength * 0.5, hangerBarLength * 0.5].forEach((x) => {
-    const capGeo = new THREE.SphereGeometry(0.023, 14, 14);
-    capGeo.scale(0.92, 0.82, 1.32);
-    const cap = new THREE.Mesh(capGeo, matteBlackWoodHangerMat);
-    cap.position.set(x, 0.405, 0);
-    hangerGroup.add(cap);
-  });
+    [-hangerBarLength * 0.5, hangerBarLength * 0.5].forEach((x) => {
+      const capGeo = new THREE.SphereGeometry(0.023, 14, 14);
+      capGeo.scale(0.92, 0.82, 1.32);
+      const cap = new THREE.Mesh(capGeo, matteBlackWoodHangerMat);
+      cap.position.set(x, 0.405, 0);
+      hangerGroup.add(cap);
+    });
 
-  const strutLength = hangerBarLength * 0.88;
-  const strutGeo = new THREE.CylinderGeometry(0.0065, 0.0065, strutLength, 16);
-  strutGeo.rotateZ(Math.PI / 2);
-  const strutMesh = new THREE.Mesh(strutGeo, matteBlackWoodHangerMat);
-  strutMesh.position.set(0, 0.35, 0);
-  hangerGroup.add(strutMesh);
+    const strutLength = hangerBarLength * 0.88;
+    const strutGeo = new THREE.CylinderGeometry(0.0065, 0.0065, strutLength, 16);
+    strutGeo.rotateZ(Math.PI / 2);
+    const strutMesh = new THREE.Mesh(strutGeo, matteBlackWoodHangerMat);
+    strutMesh.position.set(0, 0.35, 0);
+    hangerGroup.add(strutMesh);
 
-  [-strutLength * 0.5, strutLength * 0.5].forEach((x) => {
-    const bracketGeo = new THREE.CylinderGeometry(0.0095, 0.0095, 0.016, 12);
-    bracketGeo.rotateZ(Math.PI / 2);
-    const bracket = new THREE.Mesh(bracketGeo, silverMetalHookMat);
-    bracket.position.set(x, 0.35, 0);
-    hangerGroup.add(bracket);
-  });
+    [-strutLength * 0.5, strutLength * 0.5].forEach((x) => {
+      const bracketGeo = new THREE.CylinderGeometry(0.0095, 0.0095, 0.016, 12);
+      bracketGeo.rotateZ(Math.PI / 2);
+      const bracket = new THREE.Mesh(bracketGeo, silverMetalHookMat);
+      bracket.position.set(x, 0.35, 0);
+      hangerGroup.add(bracket);
+    });
+  } else {
+    // Narrow contoured neck bridge (0.26m) that rests right under the ferrule and inside the collar
+    const narrowBarLength = 0.26;
+    const neckCurve = new THREE.QuadraticBezierCurve3(
+      new THREE.Vector3(-narrowBarLength * 0.5, 0.448, 0),
+      new THREE.Vector3(0, 0.472, 0),
+      new THREE.Vector3(narrowBarLength * 0.5, 0.448, 0)
+    );
+    const neckBarGeo = new THREE.TubeGeometry(neckCurve, 20, 0.018, 14, false);
+    neckBarGeo.scale(1, 0.82, 1.25);
+    const neckBarMesh = new THREE.Mesh(neckBarGeo, matteBlackWoodHangerMat);
+    neckBarMesh.castShadow = true;
+    hangerGroup.add(neckBarMesh);
+
+    [-narrowBarLength * 0.5, narrowBarLength * 0.5].forEach((x) => {
+      const capGeo = new THREE.SphereGeometry(0.018, 12, 12);
+      const cap = new THREE.Mesh(capGeo, matteBlackWoodHangerMat);
+      cap.position.set(x, 0.448, 0);
+      hangerGroup.add(cap);
+    });
+  }
+
+  // If this is the detailed product preview / inspection view (isDetailedPDP),
+  // hide the hanger completely so the floating 3D garment displays cleanly by itself
+  if (isDetailedPDP) {
+    hangerGroup.visible = false;
+  }
 
   hangerGroup.castShadow = true;
   group.add(hangerGroup);
@@ -464,6 +500,32 @@ export function loadCustomGarmentGlb(
   onLoaded?: (glbScene: THREE.Group) => void,
   onError?: (err: unknown) => void
 ): void {
+  // Check if model is already in memory cache for instantaneous 0ms synchronous attachment
+  if (glbCache.has(url)) {
+    const cachedModel = glbCache.get(url)!.clone(true);
+    cachedModel.name = 'custom-glb-garment-model';
+
+    const existing = targetGarmentGroup.getObjectByName('custom-glb-garment-model');
+    if (existing) {
+      targetGarmentGroup.remove(existing);
+    }
+
+    targetGarmentGroup.add(cachedModel);
+    targetGarmentGroup.userData.glbModel = cachedModel;
+
+    targetGarmentGroup.position.set(offsets.position.x, offsets.position.y, offsets.position.z);
+    targetGarmentGroup.rotation.set(offsets.rotation.x, offsets.rotation.y, offsets.rotation.z);
+    targetGarmentGroup.scale.set(offsets.scale.x, offsets.scale.y, offsets.scale.z);
+
+    const procedural = targetGarmentGroup.getObjectByName('procedural-panels');
+    if (procedural) {
+      procedural.visible = false;
+    }
+
+    if (onLoaded) onLoaded(cachedModel);
+    return;
+  }
+
   gltfLoader.load(
     url,
     (gltf) => {
@@ -493,6 +555,9 @@ export function loadCustomGarmentGlb(
       glbScene.scale.set(unitScale, unitScale, unitScale);
       glbScene.position.set(0, 0, 0);
       glbScene.rotation.set(0, 0, 0);
+
+      // Save clean normalized copy to cache for future 0ms clones
+      glbCache.set(url, glbScene.clone(true));
 
       const existing = targetGarmentGroup.getObjectByName('custom-glb-garment-model');
       if (existing) {

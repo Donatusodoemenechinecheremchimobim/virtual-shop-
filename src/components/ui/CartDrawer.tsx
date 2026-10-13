@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { CartItem } from '../../types/store';
 import { X, Trash2, Plus, Minus, ArrowRight, Tag } from 'lucide-react';
 import { soundManager } from '../../audio/soundManager';
+import { formatNaira } from '../../utils/currency';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -131,7 +132,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
                     <div className="flex items-center justify-between mt-3">
                       <span className="font-mono font-bold text-xs text-yellow-400 tabular-nums">
-                        ${item.product.price * item.quantity}.00
+                        {formatNaira(item.product.price * item.quantity)}
                       </span>
 
                       {/* Steppers */}
@@ -214,23 +215,23 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             <div className="space-y-1.5 text-xs text-neutral-300 pt-2 border-t border-neutral-800">
               <div className="flex justify-between">
                 <span>Subtotal</span>
-                <span className="font-mono text-white font-bold tabular-nums">${subtotal}.00</span>
+                <span className="font-mono text-white font-bold tabular-nums">{formatNaira(subtotal)}</span>
               </div>
               {promoDiscount > 0 && (
                 <div className="flex justify-between text-yellow-400 font-semibold">
                   <span>Discount ({promoDiscount}%)</span>
-                  <span className="font-mono tabular-nums">-${discountAmount.toFixed(2)}</span>
+                  <span className="font-mono tabular-nums">-{formatNaira(discountAmount)}</span>
                 </div>
               )}
               <div className="flex justify-between">
                 <span>Delivery</span>
                 <span className="font-mono text-white tabular-nums">
-                  {shipping === 0 ? 'Free' : `$${shipping}.00`}
+                  {shipping === 0 ? 'Free' : formatNaira(shipping)}
                 </span>
               </div>
               <div className="flex justify-between text-sm font-black text-white pt-2 border-t border-neutral-800">
                 <span>Total</span>
-                <span className="font-mono text-yellow-400 tabular-nums">${total.toFixed(2)}</span>
+                <span className="font-mono text-yellow-400 tabular-nums">{formatNaira(total)}</span>
               </div>
             </div>
 

@@ -2,12 +2,12 @@ import { Product, CameraPreset, DepartmentId } from '../types/store';
 
 export const PRODUCTS: Product[] = [
   {
-    id: 'crown-of-thorns-christian-dopeclub-tank-white',
-    name: 'Cactus Bear "Christian Dopeclub" Graphic Tank',
-    subtitle: 'White Crewneck Sleeveless · Red Script Detail',
+    id: 'cactus-bear-stoner-advisory-tank-black',
+    name: 'Cactus Bear "Stoner Advisory" Graphic Tank',
+    subtitle: 'Washed Charcoal Sleeveless · Stoner Advisory Explicit Content',
     department: 'clothing',
-    price: 65,
-    originalPrice: 75,
+    price: 55000,
+    originalPrice: 65000,
     imageUrl: '/products/angle-45-three-quarter.png',
     cutoutUrl: '/products/angle-45-three-quarter.png',
     angleImages: {
@@ -17,18 +17,18 @@ export const PRODUCTS: Product[] = [
       back: '/products/angle-back.png',
       front: '/products/angle-front.png'
     },
-    description: 'A signature statement piece from Cactus Bear. This relaxed-cut crewneck tank top features the iconic distressed stencil "CHRISTIAN DOPECLUB" typography paired with an elegant red cursive "Kush Lifestyle" script from the Crown of Thorns series. Faithfully constructed in interactive 3D across all 5 authentic angles: 45° three-quarter perspective, side profile with open armhole depth, opposite profile, front, and back.',
+    description: 'An iconic streetwear statement tank engineered from heavyweight vintage-washed cotton jersey. Features the bold distressed "STONER ADVISORY EXPLICIT CONTENT" front graphic emblem paired with the signature smoking bear insignia. Modeled in photorealistic 3D with authentic drape and armhole contouring.',
     features: [
-      'Exact distressed stencil "CHRISTIAN DOPECLUB" front graphic',
-      'Fluid crimson red cursive "Kush Lifestyle" script accent',
-      'Natural crewneck sleeveless cut with visible armhole depth',
-      'Contoured matte-black wooden hanger with polished silver neck hook',
-      'All 5 authentic 3D angles viewable (3/4, side profiles, front, back)'
+      'Original "STONER ADVISORY EXPLICIT CONTENT" cartoon bear graphic',
+      'Distressed washed charcoal cotton jersey with raw-edge aesthetic',
+      'Natural relaxed sleeveless streetwear cut with visible armhole depth',
+      'Accurate 3D physics rendering and multi-angle camera inspection',
+      'Handcrafted in limited seasonal atelier drops in Nigeria and worldwide'
     ],
     materials: '100% Premium Heavyweight Cotton Jersey (260 GSM).',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
     colorways: [
-      { name: 'Pure White / Black & Red', hex: '#ffffff', secondaryHex: '#18181b', accentHex: '#dc2626' }
+      { name: 'Washed Charcoal Black', hex: '#1c1b1f', secondaryHex: '#2b292e', accentHex: '#facc15' }
     ],
     defaultColorIndex: 0,
     modelType: 'tank',
@@ -43,15 +43,15 @@ export const PRODUCTS: Product[] = [
     inStock: true,
     rating: 5.0,
     reviewCount: 312,
-    sku: 'COT-CD-001W'
+    sku: 'COT-SA-001B'
   },
   {
     id: 'cactus-bear-stoner-girl-tee',
     name: 'Cactus Bear "Stoner Girl" Graphic Tee',
-    subtitle: 'Washed Charcoal Cotton · Stoner Girl 3D Series',
+    subtitle: 'Layered Graphic Long-Sleeve / Tee · Red Script Face Artwork',
     department: 'clothing',
-    price: 75,
-    originalPrice: 90,
+    price: 65000,
+    originalPrice: 75000,
     imageUrl: '/products/stoner-girl-three-quarter.png',
     cutoutUrl: '/products/stoner-girl-three-quarter.png',
     angleImages: {
@@ -61,18 +61,18 @@ export const PRODUCTS: Product[] = [
       back: '/products/stoner-girl-back.png',
       front: '/products/stoner-girl-front.png'
     },
-    description: 'An iconic streetwear silhouette from Cactus Bear featuring the signature "Stoner Girl" 3D character graphic motif. Cut in a relaxed boxy streetwear profile with natural drop shoulders and textured cotton drape. Fully modeled in photorealistic 3D across all genuine viewing perspectives, interactively inspectable and rotatable.',
+    description: 'An iconic silhouette from Cactus Bear featuring the distinctive "Stoner Girl" graphic face artwork framed by white brushstrokes with wavy crimson red lettering. Crafted in a relaxed boxy streetwear profile with natural drop shoulders and textured vintage drape.',
     features: [
-      'Original "Stoner Girl" character artwork and streetwear iconography',
+      'Original "Stoner Girl" face character artwork and streetwear motif',
       'Articulated 3D mesh with drop shoulders and genuine garment drape',
-      'Contoured matte-black hanger presentation on the showroom rail',
+      'Contoured presentation on the showroom rail',
       'All 5 authentic angles viewable (45° 3/4, side profiles, front, back)',
       'Full 360° rotation, interactive inspection, and physics sway'
     ],
     materials: '100% Combed Heavyweight Vintage Cotton (270 GSM).',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
     colorways: [
-      { name: 'Washed Charcoal / Multi', hex: '#262626', secondaryHex: '#171717', accentHex: '#facc15' }
+      { name: 'Washed Charcoal / Multi', hex: '#262626', secondaryHex: '#171717', accentHex: '#dc2626' }
     ],
     defaultColorIndex: 0,
     modelType: 'tee',
@@ -90,33 +90,34 @@ export const PRODUCTS: Product[] = [
     sku: 'COT-SG-003C'
   },
   {
-    id: 'cactus-bear-vintage-graphic-tshirt-black',
-    name: 'Cactus Bear Vintage Graphic Tee',
-    subtitle: 'Washed Black Heavyweight Cotton · Crown of Thorns Series',
+    id: 'cactus-bear-christian-dopeclub-sleeveless-tee',
+    name: 'Cactus Bear "Christian Dopeclub" Sleeveless Tee',
+    subtitle: 'Pure White & Vintage Black · Kush Lifestyle Red Script',
     department: 'clothing',
-    price: 70,
-    originalPrice: 85,
-    imageUrl: '/products/tshirt-front.png',
-    cutoutUrl: '/products/tshirt-front.png',
+    price: 60000,
+    originalPrice: 70000,
+    imageUrl: '/products/garment-christian-dopeclub-3quarter.png',
+    cutoutUrl: '/products/garment-christian-dopeclub-3quarter.png',
     angleImages: {
-      threeQuarter: '/products/tshirt-three-quarter.png',
-      sideLeft: '/products/tshirt-side-left.png',
-      sideRight: '/products/tshirt-side-right.png',
-      back: '/products/tshirt-back.png',
-      front: '/products/tshirt-front.png'
+      threeQuarter: '/products/garment-christian-dopeclub-3quarter.png',
+      sideLeft: '/products/garment-christian-dopeclub-side.png',
+      sideRight: '/products/garment-christian-dopeclub-alt.png',
+      back: '/products/garment-christian-dopeclub-back.png',
+      front: '/products/garment-christian-dopeclub-front.png'
     },
-    description: 'An iconic heavyweight graphic t-shirt engineered from premium vintage-washed cotton jersey. Featuring the distressed Crown of Thorns iconography across the chest with natural drop shoulders, tailored sleeve contours, and ribbed crewneck collar. Rendered with full 3D physics on a contoured matte-black wooden hanger.',
+    description: 'A signature statement piece from Cactus Bear. This relaxed-cut crewneck sleeveless tee features the iconic distressed stencil "CHRISTIAN DOPECLUB" typography paired with fluid crimson red "Kush Lifestyle" script and the Crown of Thorns insignia.',
     features: [
-      'Original Cactus Bear Crown of Thorns front graphic emblem',
-      'Solid 3D textured mesh with authentic sleeve silhouette and crewneck',
-      'Natural drop-shoulder drape resting flush on contoured matte-black hanger',
-      'All genuine perspective angles: 45° three-quarter, side profiles, front, and back',
-      'Interactive 3D rotation, cloth physics, and alignment controls'
+      'Distressed stencil "CHRISTIAN DOPECLUB" front graphic',
+      'Fluid crimson red cursive "Kush Lifestyle" script accent',
+      'Natural crewneck sleeveless cut with visible armhole depth',
+      'Authentic dual colorway availability (Pure White & Washed Black)',
+      'All 5 authentic 3D perspective angles inspectable'
     ],
     materials: '100% Combed Heavyweight Vintage Cotton (280 GSM).',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
     colorways: [
-      { name: 'Vintage Washed Black', hex: '#1c1b1f', secondaryHex: '#2b292e', accentHex: '#d4af37' }
+      { name: 'Pure White / Black & Red', hex: '#ffffff', secondaryHex: '#18181b', accentHex: '#dc2626' },
+      { name: 'Vintage Washed Black', hex: '#1c1b1f', secondaryHex: '#2b292e', accentHex: '#dc2626' }
     ],
     defaultColorIndex: 0,
     modelType: 'tee',
@@ -131,7 +132,7 @@ export const PRODUCTS: Product[] = [
     inStock: true,
     rating: 4.9,
     reviewCount: 184,
-    sku: 'COT-VT-002B'
+    sku: 'COT-CD-002W'
   }
 ];
 

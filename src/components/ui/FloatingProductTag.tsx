@@ -1,6 +1,7 @@
 import React from 'react';
 import { Product } from '../../types/store';
 import { ArrowUpRight } from 'lucide-react';
+import { formatNaira } from '../../utils/currency';
 
 interface FloatingProductTagProps {
   product: Product | null;
@@ -35,7 +36,7 @@ export const FloatingProductTag: React.FC<FloatingProductTagProps> = ({ product,
 
       <div className="flex items-center gap-1.5 pl-2 border-l border-neutral-800">
         <span className="text-xs font-black text-yellow-400 font-mono tabular-nums">
-          ${product.price}.00
+          {formatNaira(product.price)}
         </span>
         <ArrowUpRight className="w-3.5 h-3.5 text-neutral-400" />
       </div>

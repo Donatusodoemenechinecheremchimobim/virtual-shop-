@@ -5,13 +5,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { Product, DepartmentId, CartItem } from './types/store';
-import { PRODUCTS } from './data/products';
 import { Header } from './components/ui/Header';
 import { DepartmentTabs } from './components/ui/DepartmentTabs';
 import { VirtualShowroom } from './components/3d/VirtualShowroom';
 import { FloatingProductTag } from './components/ui/FloatingProductTag';
-import { ProductTopBarOverlay } from './components/ui/ProductTopBarOverlay';
-import { ProductDetailModal } from './components/ui/ProductDetailModal';
+import { ProductInspectionView } from './components/ui/ProductInspectionView';
 import { CartDrawer } from './components/ui/CartDrawer';
 import { CheckoutModal } from './components/ui/CheckoutModal';
 import { SearchModal } from './components/ui/SearchModal';
@@ -21,7 +19,6 @@ import { soundManager } from './audio/soundManager';
 
 export default function App() {
   const [activeDepartment, setActiveDepartment] = useState<DepartmentId>('all');
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedActiveProduct, setSelectedActiveProduct] = useState<Product | null>(null);
   const [hoveredProduct, setHoveredProduct] = useState<Product | null>(null);
   const [hoverPos, setHoverPos] = useState<{ x: number; y: number } | null>(null);
@@ -124,50 +121,49 @@ export default function App() {
 
       {/* Main 3D Virtual Showroom Canvas */}
       <main className="relative flex-1 w-full h-full overflow-hidden">
-        {/* Premium Floating Interactive Product Details Top-Bar Overlay */}
-        <ProductTopBarOverlay
-          product={selectedActiveProduct}
-          onClose={() => setSelectedActiveProduct(null)}
-          onAddToCart={handleAddToCart}
-          onInspect={(p) => setSelectedProduct(p)}
-        />
+        {/* Focused Product Inspection View with Center 3D, Left Back & Angle Switchers, and Right Floating Card */}
+        {selectedActiveProduct && (
+          <ProductInspectionView
+            product={selectedActiveProduct}
+            onClose={() => setSelectedActiveProduct(null)}
+            onAddToCart={handleAddToCart}
+            onSelectProduct={(p) => setSelectedActiveProduct(p)}
+          />
+        )}
 
-        <VirtualShowroom
-          activeDepartment={activeDepartment}
-          onSelectProduct={(p) => setSelectedActiveProduct(p)}
-          onHoverProduct={(p, pos) => {
-            setHoveredProduct(p);
-            setHoverPos(pos);
-          }}
-        />
+        {/* 3D Showroom Rack View */}
+        <div className={`w-full h-full ${selectedActiveProduct ? 'pointer-events-none opacity-0' : 'opacity-100'} transition-opacity duration-200`}>
+          <VirtualShowroom
+            activeDepartment={activeDepartment}
+            onSelectProduct={(p) => setSelectedActiveProduct(p)}
+            onHoverProduct={(p, pos) => {
+              if (selectedActiveProduct) return;
+              setHoveredProduct(p);
+              setHoverPos(pos);
+            }}
+          />
 
-        {/* Floating Product Tag Tooltip on 3D hover */}
-        <FloatingProductTag
-          product={hoveredProduct}
-          position={hoverPos}
-        />
+          {/* Floating Product Tag Tooltip on 3D hover */}
+          <FloatingProductTag
+            product={hoveredProduct}
+            position={hoverPos}
+          />
 
-        {/* Bottom Department Quick Jump Navigation Tabs */}
-        <DepartmentTabs
-          activeDepartment={activeDepartment}
-          onSelectDepartment={setActiveDepartment}
-        />
+          {/* Bottom Department Quick Jump Navigation Tabs */}
+          <DepartmentTabs
+            activeDepartment={activeDepartment}
+            onSelectDepartment={setActiveDepartment}
+          />
 
-        {/* Navigation Controls Helper Badge */}
-        <NavigationHelper />
+          {/* Navigation Controls Helper Badge */}
+          <NavigationHelper />
 
-        {/* Luxury Streetwear Brand Footer with Crown Insignia */}
-        <Footer
-          onExploreDepartment={(dept) => setActiveDepartment(dept as DepartmentId)}
-        />
+          {/* Luxury Streetwear Brand Footer with Crown Insignia */}
+          <Footer
+            onExploreDepartment={(dept) => setActiveDepartment(dept as DepartmentId)}
+          />
+        </div>
       </main>
-
-      {/* Product Detail Modal (PDP with 360° inspector) */}
-      <ProductDetailModal
-        product={selectedProduct}
-        onClose={() => setSelectedProduct(null)}
-        onAddToCart={handleAddToCart}
-      />
 
       {/* Shopping Cart Drawer */}
       <CartDrawer

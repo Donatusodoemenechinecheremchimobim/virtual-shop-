@@ -3,6 +3,7 @@ import { Product, DepartmentId } from '../../types/store';
 import { PRODUCTS } from '../../data/products';
 import { Search, X, ArrowUpRight, Compass } from 'lucide-react';
 import { soundManager } from '../../audio/soundManager';
+import { formatNaira } from '../../utils/currency';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -136,7 +137,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
                   <div className="flex items-center gap-3 pl-4">
                     <span className="font-mono text-xs font-black text-yellow-400 tabular-nums">
-                      ${p.price}.00
+                      {formatNaira(p.price)}
                     </span>
 
                     <button
