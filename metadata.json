@@ -1,0 +1,6 @@
+{
+  "name": "Cactus Bear 3D Virtual Store",
+  "description": "Official interactive 3D virtual showroom for Cactus Bear streetwear, featuring the Christian Dopeclub and graphic apparel collection with 360-degree inspection and instant checkout.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
