@@ -33,7 +33,7 @@ export const PRODUCTS: Product[] = [
     defaultColorIndex: 0,
     modelType: 'tank',
     modelUrl: '/models/garment.glb',
-    position: [-0.60, 2.00, -4.3],
+    position: [-0.80, 2.00, -4.3],
     rotation: [0, 1.5708, 0], // Sideways profile on hanger down the rail
     garmentOffsets: {
       position: { x: 0.00, y: -0.560, z: 0.00 },
@@ -44,6 +44,50 @@ export const PRODUCTS: Product[] = [
     rating: 5.0,
     reviewCount: 312,
     sku: 'COT-CD-001W'
+  },
+  {
+    id: 'cactus-bear-stoner-girl-tee',
+    name: 'Cactus Bear "Stoner Girl" Graphic Tee',
+    subtitle: 'Washed Charcoal Cotton · Stoner Girl 3D Series',
+    department: 'clothing',
+    price: 75,
+    originalPrice: 90,
+    imageUrl: '/products/stoner-girl-three-quarter.png',
+    cutoutUrl: '/products/stoner-girl-three-quarter.png',
+    angleImages: {
+      threeQuarter: '/products/stoner-girl-three-quarter.png',
+      sideLeft: '/products/stoner-girl-side-left.png',
+      sideRight: '/products/stoner-girl-side-right.png',
+      back: '/products/stoner-girl-back.png',
+      front: '/products/stoner-girl-front.png'
+    },
+    description: 'An iconic streetwear silhouette from Cactus Bear featuring the signature "Stoner Girl" 3D character graphic motif. Cut in a relaxed boxy streetwear profile with natural drop shoulders and textured cotton drape. Fully modeled in photorealistic 3D across all genuine viewing perspectives, interactively inspectable and rotatable.',
+    features: [
+      'Original "Stoner Girl" character artwork and streetwear iconography',
+      'Articulated 3D mesh with drop shoulders and genuine garment drape',
+      'Contoured matte-black hanger presentation on the showroom rail',
+      'All 5 authentic angles viewable (45° 3/4, side profiles, front, back)',
+      'Full 360° rotation, interactive inspection, and physics sway'
+    ],
+    materials: '100% Combed Heavyweight Vintage Cotton (270 GSM).',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    colorways: [
+      { name: 'Washed Charcoal / Multi', hex: '#262626', secondaryHex: '#171717', accentHex: '#facc15' }
+    ],
+    defaultColorIndex: 0,
+    modelType: 'tee',
+    modelUrl: '/models/stoner-girl.glb',
+    garmentOffsets: {
+      position: { x: 0.00, y: -0.260, z: 0.00 },
+      rotation: { x: 0.00, y: 0.00, z: 0.00 },
+      scale: { x: 0.85, y: 0.90, z: 0.85 }
+    },
+    position: [0.00, 2.00, -4.3],
+    rotation: [0, 1.5708, 0],
+    inStock: true,
+    rating: 5.0,
+    reviewCount: 248,
+    sku: 'COT-SG-003C'
   },
   {
     id: 'cactus-bear-vintage-graphic-tshirt-black',
@@ -82,7 +126,7 @@ export const PRODUCTS: Product[] = [
       rotation: { x: 0.00, y: 0.00, z: 0.00 },
       scale: { x: 1.00, y: 1.00, z: 1.00 }
     },
-    position: [0.60, 2.00, -4.3],
+    position: [0.80, 2.00, -4.3],
     rotation: [0, 1.5708, 0],
     inStock: true,
     rating: 4.9,

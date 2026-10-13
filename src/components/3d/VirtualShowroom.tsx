@@ -411,7 +411,7 @@ export const VirtualShowroom: React.FC<VirtualShowroomProps> = ({
     });
 
     // Empty Minimalist Contoured Matte-Black Wooden Hangers with Silver Hooks for remaining slots
-    const emptySlotPositions = [-1.2, -0.8, -0.4, 0.4, 0.8, 1.2];
+    const emptySlotPositions = [-1.4, -1.1, -0.4, 0.4, 1.1, 1.4];
     const dummyProduct = PRODUCTS[0];
     const dummyColorway = dummyProduct.colorways[dummyProduct.defaultColorIndex];
     emptySlotPositions.forEach((xPos, idx) => {

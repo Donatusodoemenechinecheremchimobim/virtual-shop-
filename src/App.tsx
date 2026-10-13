@@ -15,7 +15,6 @@ import { CartDrawer } from './components/ui/CartDrawer';
 import { CheckoutModal } from './components/ui/CheckoutModal';
 import { SearchModal } from './components/ui/SearchModal';
 import { NavigationHelper } from './components/ui/NavigationHelper';
-import { HeroSection } from './components/ui/HeroSection';
 import { Footer } from './components/ui/Footer';
 import { soundManager } from './audio/soundManager';
 
@@ -130,11 +129,6 @@ export default function App() {
             setHoveredProduct(p);
             setHoverPos(pos);
           }}
-        />
-
-        {/* Hero Section: Official Crown Brand Insignia & Atelier Dossier */}
-        <HeroSection
-          onExploreDepartment={(dept) => setActiveDepartment(dept as DepartmentId)}
         />
 
         {/* Floating Product Tag Tooltip on 3D hover */}

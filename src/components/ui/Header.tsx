@@ -38,12 +38,15 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Official Crown of Thorns Inlined Vector SVG Logo */}
           <div className="flex items-center gap-3">
             <div className="relative flex items-center justify-center transition-all duration-300 group-hover:scale-105">
+              <div className="absolute inset-0 rounded-full bg-yellow-400/25 blur-md pointer-events-none" />
               <CrownLogo
                 size={38}
                 fill="#000000"
                 stroke="#facc15"
                 strokeWidth={1.8}
-                className="transition-transform duration-300"
+                glow={true}
+                glowColor="#facc15"
+                className="relative z-10 transition-transform duration-300"
               />
             </div>
             <div className="flex flex-col">
