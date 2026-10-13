@@ -183,7 +183,7 @@ export const VirtualShowroom: React.FC<VirtualShowroomProps> = ({
       alpha: false
     });
     renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -203,8 +203,8 @@ export const VirtualShowroom: React.FC<VirtualShowroomProps> = ({
     mainSun.position.set(0.6, 4.8, -1.4);
     mainSun.target.position.set(0, 2.1, -4.3);
     mainSun.castShadow = true;
-    mainSun.shadow.mapSize.width = 2048;
-    mainSun.shadow.mapSize.height = 2048;
+    mainSun.shadow.mapSize.width = 1024;
+    mainSun.shadow.mapSize.height = 1024;
     mainSun.shadow.camera.near = 0.5;
     mainSun.shadow.camera.far = 10;
     mainSun.shadow.camera.left = -5.5;

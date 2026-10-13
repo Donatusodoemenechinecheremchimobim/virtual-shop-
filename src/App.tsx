@@ -10,6 +10,7 @@ import { Header } from './components/ui/Header';
 import { DepartmentTabs } from './components/ui/DepartmentTabs';
 import { VirtualShowroom } from './components/3d/VirtualShowroom';
 import { FloatingProductTag } from './components/ui/FloatingProductTag';
+import { ProductTopBarOverlay } from './components/ui/ProductTopBarOverlay';
 import { ProductDetailModal } from './components/ui/ProductDetailModal';
 import { CartDrawer } from './components/ui/CartDrawer';
 import { CheckoutModal } from './components/ui/CheckoutModal';
@@ -21,6 +22,7 @@ import { soundManager } from './audio/soundManager';
 export default function App() {
   const [activeDepartment, setActiveDepartment] = useState<DepartmentId>('all');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedActiveProduct, setSelectedActiveProduct] = useState<Product | null>(null);
   const [hoveredProduct, setHoveredProduct] = useState<Product | null>(null);
   const [hoverPos, setHoverPos] = useState<{ x: number; y: number } | null>(null);
 
@@ -122,9 +124,17 @@ export default function App() {
 
       {/* Main 3D Virtual Showroom Canvas */}
       <main className="relative flex-1 w-full h-full overflow-hidden">
+        {/* Premium Floating Interactive Product Details Top-Bar Overlay */}
+        <ProductTopBarOverlay
+          product={selectedActiveProduct}
+          onClose={() => setSelectedActiveProduct(null)}
+          onAddToCart={handleAddToCart}
+          onInspect={(p) => setSelectedProduct(p)}
+        />
+
         <VirtualShowroom
           activeDepartment={activeDepartment}
-          onSelectProduct={(p) => setSelectedProduct(p)}
+          onSelectProduct={(p) => setSelectedActiveProduct(p)}
           onHoverProduct={(p, pos) => {
             setHoveredProduct(p);
             setHoverPos(pos);
@@ -184,7 +194,7 @@ export default function App() {
       <SearchModal
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
-        onSelectProduct={(p) => setSelectedProduct(p)}
+        onSelectProduct={(p) => setSelectedActiveProduct(p)}
         onJumpToDepartment={(dept) => setActiveDepartment(dept)}
       />
     </div>

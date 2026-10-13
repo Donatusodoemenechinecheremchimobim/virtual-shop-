@@ -217,6 +217,8 @@ export function createCrownOfThornsApparelMesh(
 
   const proceduralGroup = new THREE.Group();
   proceduralGroup.name = 'procedural-panels';
+  // Hide fallback while loading to prevent flash of unstyled content glitch; only shown on load error
+  proceduralGroup.visible = false;
   // Compensates vertical offset so procedural collar fallback rests directly on hanger
   proceduralGroup.position.set(0, 0.48, 0);
   garmentGroup.add(proceduralGroup);
@@ -835,7 +837,7 @@ export function updateGarmentClothPhysics(
 ): void {
   const frontCloth = group.userData.frontCloth as THREE.Mesh | undefined;
   const backCloth = group.userData.backCloth as THREE.Mesh | undefined;
-  if (!frontCloth) return;
+  if (!frontCloth || group.getObjectByName('procedural-panels')?.visible === false) return;
 
   const geo = frontCloth.geometry;
   const pos = geo.attributes.position;
