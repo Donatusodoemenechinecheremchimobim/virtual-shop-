@@ -146,6 +146,7 @@ export const VirtualShowroom: React.FC<VirtualShowroomProps> = ({
   // Reusable raycaster & vector to prevent GC lag during mouse/touch interaction
   const raycaster = useRef(new THREE.Raycaster());
   const mouseVector = useRef(new THREE.Vector2());
+  const interactiveObjectsRef = useRef<THREE.Object3D[]>([]);
 
   // Camera positioning helper with dynamic mobile viewport detection
   const getCameraPositionForDepartment = (dept: DepartmentId): [number, number, number] => {
@@ -205,7 +206,7 @@ export const VirtualShowroom: React.FC<VirtualShowroomProps> = ({
       alpha: false
     });
     renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.25));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -242,7 +243,7 @@ export const VirtualShowroom: React.FC<VirtualShowroomProps> = ({
     const spotRail = new THREE.SpotLight(0xfffdf6, 1.45, 15, Math.PI / 2.8, 0.45, 1);
     spotRail.position.set(0, 4.6, -1.0);
     spotRail.target.position.set(0, 2.1, -4.3);
-    spotRail.castShadow = true;
+    spotRail.castShadow = false;
     scene.add(spotRail);
     scene.add(spotRail.target);
 
@@ -298,13 +299,13 @@ export const VirtualShowroom: React.FC<VirtualShowroomProps> = ({
     // Floor: Smooth polished warm streetwear yellow (0xfacc15) with soft reflections
     const floorGeo = new THREE.PlaneGeometry(12, 12);
     floorGeo.rotateX(-Math.PI / 2);
-    const floorMat = new THREE.MeshStandardMaterial({
-      color: 0xfacc15,
-      roughness: 0.32,
-      metalness: 0.08
+    const floorMat = new THREE.MeshLambertMaterial({
+      color: 0xfacc15
     });
     const floor = new THREE.Mesh(floorGeo, floorMat);
     floor.receiveShadow = true;
+    floor.matrixAutoUpdate = false;
+    floor.updateMatrix();
     scene.add(floor);
 
     // Subtle luxury floor expansion seams in tone-on-tone warm yellow
@@ -314,28 +315,32 @@ export const VirtualShowroom: React.FC<VirtualShowroomProps> = ({
       const seamMat = new THREE.MeshBasicMaterial({ color: 0xca8a04 });
       const seam = new THREE.Mesh(seamGeo, seamMat);
       seam.position.set(x, 0.001, 0);
+      seam.matrixAutoUpdate = false;
+      seam.updateMatrix();
       scene.add(seam);
     }
 
     // Ceiling: Matching seamless yellow ceiling (0xfacc15)
     const ceilingGeo = new THREE.PlaneGeometry(12, 12);
     ceilingGeo.rotateX(Math.PI / 2);
-    const ceilingMat = new THREE.MeshStandardMaterial({ color: 0xfacc15, roughness: 0.95 });
+    const ceilingMat = new THREE.MeshLambertMaterial({ color: 0xfacc15 });
     const ceiling = new THREE.Mesh(ceilingGeo, ceilingMat);
     ceiling.position.y = 4.6;
+    ceiling.matrixAutoUpdate = false;
+    ceiling.updateMatrix();
     scene.add(ceiling);
 
     // Walls: Smooth seamless streetwear yellow (0xfacc15)
-    const wallMat = new THREE.MeshStandardMaterial({
-      color: 0xfacc15, // Exact same warm yellow (0xfacc15)
-      roughness: 0.94,
-      metalness: 0.02
+    const wallMat = new THREE.MeshLambertMaterial({
+      color: 0xfacc15
     });
 
     // Back Wall
     const wallBack = new THREE.Mesh(new THREE.PlaneGeometry(12, 4.6), wallMat);
     wallBack.position.set(0, 2.3, -4.95);
     wallBack.receiveShadow = true;
+    wallBack.matrixAutoUpdate = false;
+    wallBack.updateMatrix();
     scene.add(wallBack);
 
     // Right Wall (Shoes & Shelves)
@@ -343,6 +348,8 @@ export const VirtualShowroom: React.FC<VirtualShowroomProps> = ({
     wallRight.rotation.y = -Math.PI / 2;
     wallRight.position.set(4.95, 2.3, 0);
     wallRight.receiveShadow = true;
+    wallRight.matrixAutoUpdate = false;
+    wallRight.updateMatrix();
     scene.add(wallRight);
 
     // Left Wall (Caps & Pegboard)
@@ -350,28 +357,42 @@ export const VirtualShowroom: React.FC<VirtualShowroomProps> = ({
     wallLeft.rotation.y = Math.PI / 2;
     wallLeft.position.set(-4.95, 2.3, 0);
     wallLeft.receiveShadow = true;
+    wallLeft.matrixAutoUpdate = false;
+    wallLeft.updateMatrix();
     scene.add(wallLeft);
 
     // Front Wall
     const wallFront = new THREE.Mesh(new THREE.PlaneGeometry(12, 4.6), wallMat);
     wallFront.rotation.y = Math.PI;
     wallFront.position.set(0, 2.3, 4.95);
+    wallFront.matrixAutoUpdate = false;
+    wallFront.updateMatrix();
     scene.add(wallFront);
 
     // 6. Build Crown of Thorns Showroom Elements
     const rail = createClothingRail();
+    rail.matrixAutoUpdate = false;
+    rail.updateMatrix();
     scene.add(rail);
 
     const brandLogo = createCrownOfThornsBrandLogo();
+    brandLogo.matrixAutoUpdate = false;
+    brandLogo.updateMatrix();
     scene.add(brandLogo);
 
     const shoeWall = createShoeWallElements();
+    shoeWall.matrixAutoUpdate = false;
+    shoeWall.updateMatrix();
     scene.add(shoeWall);
 
     const capWall = createCapWallElements();
+    capWall.matrixAutoUpdate = false;
+    capWall.updateMatrix();
     scene.add(capWall);
 
     const architecturalDetails = createShowroomArchitecturalElements();
+    architecturalDetails.matrixAutoUpdate = false;
+    architecturalDetails.updateMatrix();
     scene.add(architecturalDetails);
 
     // 7. Populate the clothing products on the rack with accurate offsets and models
@@ -480,6 +501,7 @@ export const VirtualShowroom: React.FC<VirtualShowroomProps> = ({
     });
 
     productMeshesRef.current = productMap;
+    interactiveObjectsRef.current = Array.from(productMap.values()).map((item) => item.group);
 
     // 8. 60FPS Physics Simulation & Render Loop
     let animationFrameId: number;
@@ -589,6 +611,7 @@ export const VirtualShowroom: React.FC<VirtualShowroomProps> = ({
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.25));
     };
     window.addEventListener('resize', handleResize);
 
@@ -631,10 +654,9 @@ export const VirtualShowroom: React.FC<VirtualShowroomProps> = ({
     mouseVector.current.set(mouseX, mouseY);
     raycaster.current.setFromCamera(mouseVector.current, camera);
 
-    const interactiveObjects: THREE.Object3D[] = [];
-    productMeshesRef.current.forEach(({ group }) => {
-      interactiveObjects.push(group);
-    });
+    const interactiveObjects = interactiveObjectsRef.current.length > 0
+      ? interactiveObjectsRef.current
+      : Array.from(productMeshesRef.current.values()).map((item) => item.group);
 
     const intersects = raycaster.current.intersectObjects(interactiveObjects, true);
 
@@ -707,10 +729,9 @@ export const VirtualShowroom: React.FC<VirtualShowroomProps> = ({
       mouseVector.current.set(mouseX, mouseY);
       raycaster.current.setFromCamera(mouseVector.current, camera);
 
-      const interactiveObjects: THREE.Object3D[] = [];
-      productMeshesRef.current.forEach(({ group }) => {
-        interactiveObjects.push(group);
-      });
+      const interactiveObjects = interactiveObjectsRef.current.length > 0
+        ? interactiveObjectsRef.current
+        : Array.from(productMeshesRef.current.values()).map((item) => item.group);
 
       const intersects = raycaster.current.intersectObjects(interactiveObjects, true);
 

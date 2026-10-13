@@ -286,8 +286,8 @@ export function createCrownOfThornsApparelMesh(
 
   const clothW = 0.74;
   const clothH = 1.04;
-  const segX = 24;
-  const segY = 32;
+  const segX = 12;
+  const segY = 18;
   const frontGeo = new THREE.PlaneGeometry(clothW, clothH, segX, segY);
 
   const frontPos = frontGeo.attributes.position;
@@ -536,6 +536,8 @@ export function createClothingRail(): THREE.Group {
   bar.position.set(0, 2.58, -4.3);
   bar.castShadow = true;
   bar.receiveShadow = true;
+  bar.matrixAutoUpdate = false;
+  bar.updateMatrix();
   group.add(bar);
 
   [-3.2, 3.2].forEach((x) => {
@@ -543,12 +545,16 @@ export function createClothingRail(): THREE.Group {
     capGeo.rotateZ(Math.PI / 2);
     const cap = new THREE.Mesh(capGeo, matteBlackIndustrialSteelRailMat);
     cap.position.set(x, 2.58, -4.3);
+    cap.matrixAutoUpdate = false;
+    cap.updateMatrix();
     group.add(cap);
 
     const silverRingGeo = new THREE.TorusGeometry(0.024, 0.0035, 12, 24);
     silverRingGeo.rotateY(Math.PI / 2);
     const silverRing = new THREE.Mesh(silverRingGeo, silverMetalHookMat);
     silverRing.position.set(x + (x > 0 ? -0.025 : 0.025), 2.58, -4.3);
+    silverRing.matrixAutoUpdate = false;
+    silverRing.updateMatrix();
     group.add(silverRing);
   });
 
@@ -558,21 +564,29 @@ export function createClothingRail(): THREE.Group {
     const pipe = new THREE.Mesh(pipeGeo, matteBlackIndustrialSteelRailMat);
     pipe.position.set(x, 2.58, -4.61);
     pipe.castShadow = true;
+    pipe.matrixAutoUpdate = false;
+    pipe.updateMatrix();
     group.add(pipe);
 
     const flangeGeo = new THREE.CylinderGeometry(0.062, 0.062, 0.02, 24);
     flangeGeo.rotateX(Math.PI / 2);
     const flange = new THREE.Mesh(flangeGeo, matteBlackIndustrialSteelRailMat);
     flange.position.set(x, 2.58, -4.92);
+    flange.matrixAutoUpdate = false;
+    flange.updateMatrix();
     group.add(flange);
 
     const washerGeo = new THREE.CylinderGeometry(0.032, 0.032, 0.025, 20);
     washerGeo.rotateX(Math.PI / 2);
     const washer = new THREE.Mesh(washerGeo, silverMetalHookMat);
     washer.position.set(x, 2.58, -4.89);
+    washer.matrixAutoUpdate = false;
+    washer.updateMatrix();
     group.add(washer);
   });
 
+  group.matrixAutoUpdate = false;
+  group.updateMatrix();
   return group;
 }
 
@@ -602,8 +616,12 @@ export function createCrownOfThornsBrandLogo(): THREE.Group {
 
   const logoMesh = new THREE.Mesh(logoGeo, logoMat);
   logoMesh.position.set(0, 3.25, -4.92);
+  logoMesh.matrixAutoUpdate = false;
+  logoMesh.updateMatrix();
   group.add(logoMesh);
 
+  group.matrixAutoUpdate = false;
+  group.updateMatrix();
   return group;
 }
 
@@ -617,6 +635,8 @@ export function createShoeWallElements(): THREE.Group {
   panel.position.set(4.42, 1.85, 0.0);
   panel.receiveShadow = true;
   panel.castShadow = true;
+  panel.matrixAutoUpdate = false;
+  panel.updateMatrix();
   group.add(panel);
 
   for (let z = -1.8; z <= 1.8; z += 0.25) {
@@ -624,6 +644,8 @@ export function createShoeWallElements(): THREE.Group {
     const grooveMat = new THREE.MeshBasicMaterial({ color: 0xb08968 });
     const groove = new THREE.Mesh(grooveGeo, grooveMat);
     groove.position.set(4.385, 1.85, z);
+    groove.matrixAutoUpdate = false;
+    groove.updateMatrix();
     group.add(groove);
   }
 
@@ -642,12 +664,16 @@ export function createShoeWallElements(): THREE.Group {
     shelf.position.set(x, y, z);
     shelf.castShadow = true;
     shelf.receiveShadow = true;
+    shelf.matrixAutoUpdate = false;
+    shelf.updateMatrix();
     group.add(shelf);
 
     const ledGeo = new THREE.BoxGeometry(0.02, 0.008, 0.88);
     const ledMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
     const led = new THREE.Mesh(ledGeo, ledMat);
     led.position.set(x - 0.15, y - 0.02, z);
+    led.matrixAutoUpdate = false;
+    led.updateMatrix();
     group.add(led);
   });
 
@@ -656,12 +682,16 @@ export function createShoeWallElements(): THREE.Group {
   const signBacking = new THREE.Mesh(signBackingGeo, signMat);
   signBacking.position.set(4.38, 3.45, 0.0);
   signBacking.castShadow = true;
+  signBacking.matrixAutoUpdate = false;
+  signBacking.updateMatrix();
   group.add(signBacking);
 
   [-0.32, 0.32].forEach((zOffset) => {
     const wireGeo = new THREE.CylinderGeometry(0.003, 0.003, 0.8, 8);
     const wire = new THREE.Mesh(wireGeo, satinChromeMat);
     wire.position.set(4.38, 3.85, zOffset);
+    wire.matrixAutoUpdate = false;
+    wire.updateMatrix();
     group.add(wire);
   });
 
@@ -670,6 +700,8 @@ export function createShoeWallElements(): THREE.Group {
   const frame = new THREE.Mesh(frameGeo, frameMat);
   frame.position.set(4.42, 2.0, 2.7);
   frame.castShadow = true;
+  frame.matrixAutoUpdate = false;
+  frame.updateMatrix();
   group.add(frame);
 
   const canvasGeo = new THREE.PlaneGeometry(1.22, 1.62);
@@ -684,8 +716,12 @@ export function createShoeWallElements(): THREE.Group {
   }
   const canvasMesh = new THREE.Mesh(canvasGeo, canvasMat);
   canvasMesh.position.set(4.39, 2.0, 2.7);
+  canvasMesh.matrixAutoUpdate = false;
+  canvasMesh.updateMatrix();
   group.add(canvasMesh);
 
+  group.matrixAutoUpdate = false;
+  group.updateMatrix();
   return group;
 }
 
@@ -697,6 +733,8 @@ export function createCapWallElements(): THREE.Group {
   panel.position.set(-4.42, 1.85, -0.3);
   panel.receiveShadow = true;
   panel.castShadow = true;
+  panel.matrixAutoUpdate = false;
+  panel.updateMatrix();
   group.add(panel);
 
   const signBackingGeo = new THREE.BoxGeometry(0.03, 0.26, 0.7);
@@ -704,12 +742,16 @@ export function createCapWallElements(): THREE.Group {
   const signBacking = new THREE.Mesh(signBackingGeo, signMat);
   signBacking.position.set(-4.38, 3.45, -0.3);
   signBacking.castShadow = true;
+  signBacking.matrixAutoUpdate = false;
+  signBacking.updateMatrix();
   group.add(signBacking);
 
   [-0.24, 0.24].forEach((zOffset) => {
     const wireGeo = new THREE.CylinderGeometry(0.003, 0.003, 0.8, 8);
     const wire = new THREE.Mesh(wireGeo, satinChromeMat);
     wire.position.set(-4.38, 3.85, -0.3 + zOffset);
+    wire.matrixAutoUpdate = false;
+    wire.updateMatrix();
     group.add(wire);
   });
 
@@ -717,6 +759,8 @@ export function createCapWallElements(): THREE.Group {
   const mirrorFrame = new THREE.Mesh(mirrorFrameGeo, champagneBrassMat);
   mirrorFrame.position.set(-4.42, 1.8, 2.3);
   mirrorFrame.castShadow = true;
+  mirrorFrame.matrixAutoUpdate = false;
+  mirrorFrame.updateMatrix();
   group.add(mirrorFrame);
 
   const mirrorGlassGeo = new THREE.PlaneGeometry(1.0, 2.1);
@@ -728,8 +772,12 @@ export function createCapWallElements(): THREE.Group {
   });
   const mirrorGlass = new THREE.Mesh(mirrorGlassGeo, mirrorGlassMat);
   mirrorGlass.position.set(-4.39, 1.8, 2.3);
+  mirrorGlass.matrixAutoUpdate = false;
+  mirrorGlass.updateMatrix();
   group.add(mirrorGlass);
 
+  group.matrixAutoUpdate = false;
+  group.updateMatrix();
   return group;
 }
 
@@ -741,11 +789,15 @@ export function createShowroomArchitecturalElements(): THREE.Group {
   plinth.position.set(0, 0.19, 0.8);
   plinth.castShadow = true;
   plinth.receiveShadow = true;
+  plinth.matrixAutoUpdate = false;
+  plinth.updateMatrix();
   group.add(plinth);
 
   const plinthBaseGeo = new THREE.BoxGeometry(2.32, 0.06, 1.12);
   const plinthBase = new THREE.Mesh(plinthBaseGeo, champagneBrassMat);
   plinthBase.position.set(0, 0.03, 0.8);
+  plinthBase.matrixAutoUpdate = false;
+  plinthBase.updateMatrix();
   group.add(plinthBase);
 
   const glassGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.35, 24);
@@ -759,11 +811,15 @@ export function createShowroomArchitecturalElements(): THREE.Group {
   });
   const glass = new THREE.Mesh(glassGeo, glassMat);
   glass.position.set(0, 0.56, 0.8);
+  glass.matrixAutoUpdate = false;
+  glass.updateMatrix();
   group.add(glass);
 
   const flaconGeo = new THREE.CylinderGeometry(0.06, 0.06, 0.18, 16);
   const flacon = new THREE.Mesh(flaconGeo, darkGunmetalMat);
   flacon.position.set(0, 0.48, 0.8);
+  flacon.matrixAutoUpdate = false;
+  flacon.updateMatrix();
   group.add(flacon);
 
   const planterGeo = new THREE.CylinderGeometry(0.24, 0.18, 0.65, 20);
@@ -771,6 +827,8 @@ export function createShowroomArchitecturalElements(): THREE.Group {
   const planter = new THREE.Mesh(planterGeo, planterMat);
   planter.position.set(-3.2, 0.32, 1.8);
   planter.castShadow = true;
+  planter.matrixAutoUpdate = false;
+  planter.updateMatrix();
   group.add(planter);
 
   for (let i = 0; i < 4; i++) {
@@ -781,6 +839,8 @@ export function createShowroomArchitecturalElements(): THREE.Group {
     stem.position.set(-3.2 + Math.cos(angle) * 0.08, 0.95, 1.8 + Math.sin(angle) * 0.08);
     stem.rotation.z = Math.cos(angle) * 0.15;
     stem.rotation.x = Math.sin(angle) * 0.15;
+    stem.matrixAutoUpdate = false;
+    stem.updateMatrix();
     group.add(stem);
   }
 
@@ -789,6 +849,8 @@ export function createShowroomArchitecturalElements(): THREE.Group {
     const trackMat = new THREE.MeshStandardMaterial({ color: 0x18181b, roughness: 0.4 });
     const track = new THREE.Mesh(trackGeo, trackMat);
     track.position.set(x, 4.58, 0.0);
+    track.matrixAutoUpdate = false;
+    track.updateMatrix();
     group.add(track);
 
     [-3.2, -1.6, 0.0, 1.6, 3.2].forEach((z) => {
@@ -796,6 +858,8 @@ export function createShowroomArchitecturalElements(): THREE.Group {
       const spotHead = new THREE.Mesh(spotHeadGeo, trackMat);
       spotHead.position.set(x, 4.52, z);
       spotHead.rotation.x = z < 0 ? -0.3 : 0.3;
+      spotHead.matrixAutoUpdate = false;
+      spotHead.updateMatrix();
       group.add(spotHead);
     });
   });
@@ -808,8 +872,12 @@ export function createShowroomArchitecturalElements(): THREE.Group {
   });
   const nicheBack = new THREE.Mesh(nicheBackGeo, nicheBackMat);
   nicheBack.position.set(0, 2.5, -4.92);
+  nicheBack.matrixAutoUpdate = false;
+  nicheBack.updateMatrix();
   group.add(nicheBack);
 
+  group.matrixAutoUpdate = false;
+  group.updateMatrix();
   return group;
 }
 
