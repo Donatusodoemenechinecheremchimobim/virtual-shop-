@@ -20,7 +20,7 @@ export const DepartmentTabs: React.FC<DepartmentTabsProps> = ({
   ];
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center p-1.5 bg-neutral-950/95 backdrop-blur-xl border border-neutral-800 rounded-2xl shadow-2xl">
+    <div className="hidden md:flex fixed bottom-6 left-1/2 -translate-x-1/2 z-20 items-center p-1.5 bg-neutral-950/95 backdrop-blur-xl border border-neutral-800 rounded-2xl shadow-2xl">
       <div className="flex items-center gap-1">
         {tabs.map((tab) => {
           const isActive = activeDepartment === tab.id;

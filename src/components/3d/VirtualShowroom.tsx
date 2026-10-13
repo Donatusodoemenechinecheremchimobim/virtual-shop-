@@ -143,11 +143,31 @@ export const VirtualShowroom: React.FC<VirtualShowroomProps> = ({
   const dragStartTime = useRef(0);
   const smoothDragVelocity = useRef({ x: 0, y: 0 });
 
+  // Reusable raycaster & vector to prevent GC lag during mouse/touch interaction
+  const raycaster = useRef(new THREE.Raycaster());
+  const mouseVector = useRef(new THREE.Vector2());
+
+  // Camera positioning helper with dynamic mobile viewport detection
+  const getCameraPositionForDepartment = (dept: DepartmentId): [number, number, number] => {
+    const preset = CAMERA_PRESETS[dept] || CAMERA_PRESETS.all;
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    const pos = [...preset.position] as [number, number, number];
+    if (isMobile) {
+      if (dept === 'all') {
+        pos[2] = 3.4; // Pull back camera on mobile so entire rail and logo stay in frame
+      } else if (dept === 'clothing') {
+        pos[2] = -1.1; // Pull back slightly on mobile for vertical aspect ratios
+      }
+    }
+    return pos;
+  };
+
   // Fast camera jump on department change
   useEffect(() => {
     const preset = CAMERA_PRESETS[activeDepartment];
     if (preset) {
-      targetCamPos.current.set(...preset.position);
+      const pos = getCameraPositionForDepartment(activeDepartment);
+      targetCamPos.current.set(...pos);
       targetCamLook.current.set(...preset.target);
       orbitAngle.current = { theta: 0, phi: 0 };
       isUserInteracting.current = false;
@@ -165,15 +185,17 @@ export const VirtualShowroom: React.FC<VirtualShowroomProps> = ({
     scene.background = new THREE.Color(0xfacc15); // Streetwear warm yellow
     scene.fog = new THREE.FogExp2(0xfacc15, 0.022);
 
-    // 2. Camera setup
+    // 2. Camera setup with mobile vertical viewport compensation
     const camera = new THREE.PerspectiveCamera(
       46,
       container.clientWidth / container.clientHeight,
       0.1,
       40
     );
-    camera.position.set(...CAMERA_PRESETS.all.position);
-    camera.lookAt(...CAMERA_PRESETS.all.target);
+    const initialPos = getCameraPositionForDepartment(activeDepartment);
+    camera.position.set(...initialPos);
+    targetCamPos.current.set(...initialPos);
+    camera.lookAt(...(CAMERA_PRESETS[activeDepartment]?.target || CAMERA_PRESETS.all.target));
     cameraRef.current = camera;
 
     // 3. Renderer
@@ -605,16 +627,16 @@ export const VirtualShowroom: React.FC<VirtualShowroomProps> = ({
     const mouseX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     const mouseY = -((e.clientY - rect.top) / rect.height) * 2 + 1;
 
-    // Raycast against products to see if user tapped a garment
-    const raycaster = new THREE.Raycaster();
-    raycaster.setFromCamera(new THREE.Vector2(mouseX, mouseY), camera);
+    // Raycast against products to see if user tapped a garment using cached refs
+    mouseVector.current.set(mouseX, mouseY);
+    raycaster.current.setFromCamera(mouseVector.current, camera);
 
     const interactiveObjects: THREE.Object3D[] = [];
     productMeshesRef.current.forEach(({ group }) => {
       interactiveObjects.push(group);
     });
 
-    const intersects = raycaster.intersectObjects(interactiveObjects, true);
+    const intersects = raycaster.current.intersectObjects(interactiveObjects, true);
 
     if (intersects.length > 0) {
       let topObj: THREE.Object3D | null = intersects[0].object;
@@ -682,15 +704,15 @@ export const VirtualShowroom: React.FC<VirtualShowroomProps> = ({
       const mouseX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       const mouseY = -((e.clientY - rect.top) / rect.height) * 2 + 1;
 
-      const raycaster = new THREE.Raycaster();
-      raycaster.setFromCamera(new THREE.Vector2(mouseX, mouseY), camera);
+      mouseVector.current.set(mouseX, mouseY);
+      raycaster.current.setFromCamera(mouseVector.current, camera);
 
       const interactiveObjects: THREE.Object3D[] = [];
       productMeshesRef.current.forEach(({ group }) => {
         interactiveObjects.push(group);
       });
 
-      const intersects = raycaster.intersectObjects(interactiveObjects, true);
+      const intersects = raycaster.current.intersectObjects(interactiveObjects, true);
 
       if (intersects.length > 0) {
         let topObj: THREE.Object3D | null = intersects[0].object;
@@ -813,10 +835,14 @@ export const VirtualShowroom: React.FC<VirtualShowroomProps> = ({
   };
 
   return (
-    <div className="relative w-full h-full overflow-hidden select-none">
+    <div
+      className="relative w-full h-full overflow-hidden select-none touch-none overscroll-contain"
+      style={{ touchAction: 'none', overscrollBehavior: 'contain' }}
+    >
       <div
         ref={containerRef}
-        className="w-full h-full cursor-grab active:cursor-grabbing"
+        className="w-full h-full cursor-grab active:cursor-grabbing touch-none overscroll-contain"
+        style={{ touchAction: 'none', overscrollBehavior: 'contain' }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}

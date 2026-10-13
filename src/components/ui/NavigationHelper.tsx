@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MousePointer, Eye, Move, Info, X } from 'lucide-react';
 
 export const NavigationHelper: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(typeof window !== 'undefined' ? window.innerWidth >= 768 : true);
 
   if (!isOpen) {
     return (

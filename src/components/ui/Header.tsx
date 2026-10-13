@@ -14,6 +14,13 @@ interface HeaderProps {
   onToggleSound: () => void;
 }
 
+const DEPARTMENTS: { id: DepartmentId; label: string }[] = [
+  { id: 'all', label: 'Overview 360°' },
+  { id: 'clothing', label: 'Clothing' },
+  { id: 'shoes', label: 'Shoes & Shelves' },
+  { id: 'caps', label: 'Caps & Pegboard' },
+];
+
 export const Header: React.FC<HeaderProps> = ({
   cartCount,
   onOpenCart,
@@ -24,133 +31,135 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleSound
 }) => {
   return (
-    <header className="relative z-30 flex items-center justify-between gap-8 px-6 py-4 border-b border-neutral-900 bg-neutral-950/95 backdrop-blur-md text-white shadow-xl">
-      {/* Zone 1: Brand Insignia Wordmark */}
-      <div className="flex items-center gap-3 shrink-0">
-        <button
-          onClick={() => {
-            soundManager.playClick(900);
-            onSelectDepartment('all');
-          }}
-          className="flex items-center gap-3 group text-left cursor-pointer"
-          aria-label="Cactus Bear 3D Virtual Showroom Home"
-        >
-          {/* Official Crown of Thorns Inlined Vector SVG Logo */}
-          <div className="flex items-center gap-3">
-            <div className="relative flex items-center justify-center transition-all duration-300 group-hover:scale-105">
-              <div className="absolute inset-0 rounded-full bg-yellow-400/25 blur-md pointer-events-none" />
-              <CrownLogo
-                size={38}
-                fill="#000000"
-                stroke="#facc15"
-                strokeWidth={1.8}
-                glow={true}
-                glowColor="#facc15"
-                className="relative z-10 transition-transform duration-300"
-              />
+    <header className="relative z-30 flex flex-col border-b border-neutral-900 bg-neutral-950/95 backdrop-blur-md text-white shadow-xl">
+      {/* Primary Top Bar Row */}
+      <div className="flex items-center justify-between gap-4 px-4 sm:px-6 py-3.5">
+        {/* Zone 1: Brand Insignia Wordmark */}
+        <div className="flex items-center gap-3 shrink-0">
+          <button
+            onClick={() => {
+              soundManager.playClick(900);
+              onSelectDepartment('all');
+            }}
+            className="flex items-center gap-3 group text-left cursor-pointer"
+            aria-label="Cactus Bear 3D Virtual Showroom Home"
+          >
+            {/* Official Crown of Thorns Inlined Vector SVG Logo */}
+            <div className="flex items-center gap-3">
+              <div className="relative flex items-center justify-center transition-all duration-300 group-hover:scale-105">
+                <div className="absolute inset-0 rounded-full bg-yellow-400/25 blur-md pointer-events-none" />
+                <CrownLogo
+                  size={36}
+                  fill="#000000"
+                  stroke="#facc15"
+                  strokeWidth={1.8}
+                  glow={true}
+                  glowColor="#facc15"
+                  className="relative z-10 transition-transform duration-300"
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-display text-base font-black tracking-tight text-yellow-400 whitespace-nowrap leading-tight">
+                  CACTUS BEAR
+                </span>
+                <span className="text-neutral-400 font-semibold text-[10px] uppercase tracking-widest">
+                  VIRTUAL SHOWROOM
+                </span>
+              </div>
             </div>
-            <div className="flex flex-col">
-              <span className="font-display text-base font-black tracking-tight text-yellow-400 whitespace-nowrap leading-tight">
-                CACTUS BEAR
+          </button>
+        </div>
+
+        {/* Zone 2: Desktop clean text navigation links */}
+        <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-neutral-400">
+          {DEPARTMENTS.map((dept) => {
+            const isActive = activeDepartment === dept.id;
+            return (
+              <button
+                key={dept.id}
+                onClick={() => {
+                  soundManager.playClick(800);
+                  onSelectDepartment(dept.id);
+                }}
+                className={`hover:text-yellow-400 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                  isActive ? 'text-yellow-400 font-bold' : ''
+                }`}
+              >
+                {dept.label}
+              </button>
+            );
+          })}
+        </nav>
+
+        {/* Zone 3: Primary action & controls */}
+        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+          {/* Audio Ambiance Toggle */}
+          <button
+            onClick={() => onToggleSound()}
+            aria-label={isSoundMuted ? 'Unmute showroom audio' : 'Mute showroom audio'}
+            title={isSoundMuted ? 'Audio muted' : 'Audio enabled'}
+            className="p-2 sm:p-2.5 rounded-lg text-neutral-400 hover:text-yellow-400 hover:bg-neutral-900 transition-colors cursor-pointer"
+          >
+            {isSoundMuted ? <VolumeX className="w-4 h-4 text-neutral-500" /> : <Volume2 className="w-4 h-4 text-yellow-400" />}
+          </button>
+
+          {/* Search Modal Trigger */}
+          <button
+            onClick={() => {
+              soundManager.playClick(800);
+              onOpenSearch();
+            }}
+            aria-label="Search catalog"
+            className="p-2 sm:p-2.5 rounded-lg text-neutral-400 hover:text-yellow-400 hover:bg-neutral-900 transition-colors cursor-pointer"
+          >
+            <Search className="w-4 h-4" />
+          </button>
+
+          {/* Shopping Bag Drawer Trigger */}
+          <button
+            onClick={() => {
+              soundManager.playClick(900);
+              onOpenCart();
+            }}
+            aria-label={`Shopping Cart with ${cartCount} items`}
+            className="relative flex items-center gap-2 px-3.5 sm:px-4 py-2 text-xs font-bold text-neutral-950 bg-yellow-400 rounded-lg hover:bg-yellow-300 transition-colors whitespace-nowrap shrink-0 shadow-md cursor-pointer"
+          >
+            <ShoppingBag className="w-4 h-4 text-neutral-950" />
+            <span className="hidden sm:inline font-bold">Cart</span>
+            {cartCount > 0 && (
+              <span className="w-5 h-5 rounded-full bg-black text-yellow-400 text-[11px] font-black flex items-center justify-center font-mono">
+                {cartCount}
               </span>
-              <span className="text-neutral-400 font-semibold text-[10px] uppercase tracking-widest">
-                VIRTUAL SHOWROOM
-              </span>
-            </div>
-          </div>
-        </button>
+            )}
+          </button>
+        </div>
       </div>
 
-      {/* Zone 2: Clean single-line text navigation links */}
-      <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-neutral-400">
-        <button
-          onClick={() => {
-            soundManager.playClick(800);
-            onSelectDepartment('all');
-          }}
-          className={`hover:text-yellow-400 transition-colors whitespace-nowrap shrink-0 ${
-            activeDepartment === 'all' ? 'text-yellow-400 font-bold' : ''
-          }`}
-        >
-          Overview 360°
-        </button>
-        <button
-          onClick={() => {
-            soundManager.playClick(800);
-            onSelectDepartment('clothing');
-          }}
-          className={`hover:text-yellow-400 transition-colors whitespace-nowrap shrink-0 ${
-            activeDepartment === 'clothing' ? 'text-yellow-400 font-bold' : ''
-          }`}
-        >
-          Clothing
-        </button>
-        <button
-          onClick={() => {
-            soundManager.playClick(800);
-            onSelectDepartment('shoes');
-          }}
-          className={`hover:text-yellow-400 transition-colors whitespace-nowrap shrink-0 ${
-            activeDepartment === 'shoes' ? 'text-yellow-400 font-bold' : ''
-          }`}
-        >
-          Shoes & Shelves
-        </button>
-        <button
-          onClick={() => {
-            soundManager.playClick(800);
-            onSelectDepartment('caps');
-          }}
-          className={`hover:text-yellow-400 transition-colors whitespace-nowrap shrink-0 ${
-            activeDepartment === 'caps' ? 'text-yellow-400 font-bold' : ''
-          }`}
-        >
-          Caps & Pegboard
-        </button>
+      {/* Mobile Streamlined Navigation: Swipeable horizontal bar with high-contrast yellow-and-black styling */}
+      <nav
+        aria-label="Mobile Department Categories"
+        className="flex md:hidden items-center gap-2 px-4 py-2 overflow-x-auto no-scrollbar scroll-smooth border-t border-neutral-900 bg-neutral-950/95"
+      >
+        {DEPARTMENTS.map((dept) => {
+          const isActive = activeDepartment === dept.id;
+          return (
+            <button
+              key={dept.id}
+              onClick={() => {
+                soundManager.playClick(800);
+                onSelectDepartment(dept.id);
+              }}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider whitespace-nowrap shrink-0 transition-all cursor-pointer border ${
+                isActive
+                  ? 'bg-yellow-400 text-black border-yellow-400 shadow-[0_0_12px_rgba(250,204,21,0.6)]'
+                  : 'bg-black text-neutral-300 border-yellow-400/40 hover:border-yellow-400 hover:text-white'
+              }`}
+            >
+              {dept.label}
+            </button>
+          );
+        })}
       </nav>
-
-      {/* Zone 3: Primary action & controls */}
-      <div className="flex items-center gap-2.5 shrink-0">
-        {/* Audio Ambiance Toggle */}
-        <button
-          onClick={() => onToggleSound()}
-          aria-label={isSoundMuted ? 'Unmute showroom audio' : 'Mute showroom audio'}
-          title={isSoundMuted ? 'Audio muted' : 'Audio enabled'}
-          className="p-2.5 rounded-lg text-neutral-400 hover:text-yellow-400 hover:bg-neutral-900 transition-colors"
-        >
-          {isSoundMuted ? <VolumeX className="w-4 h-4 text-neutral-500" /> : <Volume2 className="w-4 h-4 text-yellow-400" />}
-        </button>
-
-        {/* Search Modal Trigger */}
-        <button
-          onClick={() => {
-            soundManager.playClick(800);
-            onOpenSearch();
-          }}
-          aria-label="Search catalog"
-          className="p-2.5 rounded-lg text-neutral-400 hover:text-yellow-400 hover:bg-neutral-900 transition-colors"
-        >
-          <Search className="w-4 h-4" />
-        </button>
-
-        {/* Shopping Bag Drawer Trigger */}
-        <button
-          onClick={() => {
-            soundManager.playClick(900);
-            onOpenCart();
-          }}
-          aria-label={`Shopping Cart with ${cartCount} items`}
-          className="relative flex items-center gap-2 px-4 py-2 text-xs font-bold text-neutral-950 bg-yellow-400 rounded-lg hover:bg-yellow-300 transition-colors whitespace-nowrap shrink-0 shadow-md"
-        >
-          <ShoppingBag className="w-4 h-4 text-neutral-950" />
-          <span className="hidden sm:inline font-bold">Cart</span>
-          {cartCount > 0 && (
-            <span className="w-5 h-5 rounded-full bg-black text-yellow-400 text-[11px] font-black flex items-center justify-center font-mono">
-              {cartCount}
-            </span>
-          )}
-        </button>
-      </div>
     </header>
   );
 };
